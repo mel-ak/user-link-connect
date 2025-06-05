@@ -6,12 +6,10 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
-import { Loader2, ExternalLink } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
 
 export const AuthForm = () => {
   const { signUp, signIn, signInWithSSO } = useAuth();
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -169,7 +167,7 @@ export const AuthForm = () => {
               </Button>
             </div>
 
-            <div className="mt-4 space-y-3">
+            <div className="mt-4">
               <Button
                 variant="outline"
                 onClick={() => handleSSOLogin('custom')}
@@ -177,16 +175,6 @@ export const AuthForm = () => {
                 className="w-full"
               >
                 Custom SSO
-              </Button>
-              
-              <Button
-                variant="outline"
-                onClick={() => navigate('/custom-sso')}
-                disabled={loading}
-                className="w-full flex items-center gap-2"
-              >
-                <ExternalLink className="h-4 w-4" />
-                Team's Custom Backend
               </Button>
             </div>
           </div>
