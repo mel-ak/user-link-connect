@@ -50,85 +50,58 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const signUp = async (email: string, password: string, fullName?: string) => {
-    try {
-      // Call custom SSO edge function for signup
-      const { data, error } = await supabase.functions.invoke('custom-sso', {
-        body: {
-          action: 'signup',
-          email,
-          password,
-          name: fullName || 'User'
+    const redirectUrl = `${window.location.origin}/`;
+    
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: redirectUrl,
+        data: {
+          full_name: fullName,
         }
-      });
-
-      if (error || !data.success) {
-        throw new Error(data?.error || 'Signup failed');
       }
+    });
 
-      toast({
-        title: "Success",
-        description: "Account created successfully! You can now sign in.",
-      });
-
-      return { error: null };
-    } catch (error: any) {
+    if (error) {
       toast({
         title: "Signup Error",
         description: error.message,
         variant: "destructive",
       });
-      return { error };
+    } else {
+      toast({
+        title: "Success",
+        description: "Please check your email to verify your account.",
+      });
     }
+
+    return { error };
   };
 
   const signIn = async (email: string, password: string) => {
-    try {
-      // Call custom SSO edge function for signin
-      const { data, error } = await supabase.functions.invoke('custom-sso', {
-        body: {
-          action: 'signin',
-          email,
-          password
-        }
-      });
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-      if (error || !data.success) {
-        throw new Error(data?.error || 'Login failed');
-      }
-
-      // Store the backend token for future API calls
-      localStorage.setItem('backend_token', data.backend_token);
-
-      // Sign in with Supabase using the session data
-      const { error: supabaseError } = await supabase.auth.setSession({
-        access_token: data.supabase_session.properties.access_token,
-        refresh_token: data.supabase_session.properties.refresh_token
-      });
-
-      if (supabaseError) {
-        throw new Error('Session creation failed');
-      }
-
-      toast({
-        title: "Welcome back!",
-        description: "You have successfully logged in.",
-      });
-
-      return { error: null };
-    } catch (error: any) {
+    if (error) {
       toast({
         title: "Login Error",
         description: error.message,
         variant: "destructive",
       });
-      return { error };
+    } else {
+      toast({
+        title: "Welcome back!",
+        description: "You have successfully logged in.",
+      });
     }
+
+    return { error };
   };
 
   const signOut = async () => {
-    // Clear backend token
-    localStorage.removeItem('backend_token');
-    
     const { error } = await supabase.auth.signOut();
     if (error) {
       toast({
@@ -145,16 +118,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signInWithSSO = async (provider: string) => {
-    if (provider === 'custom') {
-      // Redirect to custom SSO login page or show modal
-      toast({
-        title: "Custom SSO",
-        description: "Please use the sign in form for custom backend authentication.",
-      });
-      return { error: null };
-    }
-
-    // Handle other SSO providers (Google, GitHub)
     const { error } = await supabase.auth.signInWithOAuth({
       provider: provider as any,
       options: {

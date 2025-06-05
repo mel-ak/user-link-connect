@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -87,7 +88,7 @@ export const AuthForm = () => {
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Sign In with Custom Backend
+                  Sign In
                 </Button>
               </form>
             </TabsContent>
@@ -131,7 +132,7 @@ export const AuthForm = () => {
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Create Account with Custom Backend
+                  Sign Up
                 </Button>
               </form>
             </TabsContent>
@@ -173,7 +174,7 @@ export const AuthForm = () => {
                 disabled={loading}
                 className="w-full"
               >
-                Custom SSO (Backend Integration)
+                Custom SSO
               </Button>
             </div>
           </div>

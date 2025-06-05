@@ -1,5 +1,1 @@
-
 project_id = "otsquyhcumtnqrgfgwdr"
-
-[functions.custom-sso]
-verify_jwt = false
