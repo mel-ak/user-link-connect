@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useNavigate } from 'react-router-dom';
-import { LogIn, UserPlus, Shield } from 'lucide-react';
+import { LogIn, UserPlus, Shield, ExternalLink } from 'lucide-react';
 
 const Index = () => {
   const { user } = useAuth();
@@ -69,10 +69,23 @@ const Index = () => {
               <p className="text-lg text-gray-700 mb-8">
                 Get started by signing in or creating a new account
               </p>
-              <div className="space-x-4">
-                <Button onClick={() => navigate('/auth')} size="lg">
-                  Sign In / Sign Up
-                </Button>
+              <div className="space-y-4">
+                <div className="space-x-4">
+                  <Button onClick={() => navigate('/auth')} size="lg">
+                    Sign In / Sign Up
+                  </Button>
+                </div>
+                <div>
+                  <Button 
+                    onClick={() => navigate('/custom-sso')} 
+                    variant="outline" 
+                    size="lg"
+                    className="flex items-center gap-2"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    Team's Custom Backend
+                  </Button>
+                </div>
               </div>
             </div>
           )}
